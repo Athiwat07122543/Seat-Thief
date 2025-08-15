@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Image from "next/image";
 
 export default function Home() {
@@ -100,4 +101,25 @@ export default function Home() {
       </footer>
     </div>
   );
+=======
+'use client'
+import { useSession, signIn, signOut } from "next-auth/react"
+
+export default function Home() {
+  const { data: session, status } = useSession()
+
+  return (
+    <div className='flex h-screen justify-center items-center'>
+      <div className="border p-4">
+        {status === 'authenticated' && session ? (<div>
+          <p>Username: {session.user.username}</p>
+          <button className="border p-1" onClick={() => signOut()}>Sign Out</button>
+        </div>) : (<div>
+          <p>Seat Thief T-T</p>
+          <button className="border p-1" onClick={() => signIn()}>Sign In</button>
+        </div>)}
+      </div>
+    </div>
+  )
+>>>>>>> 188c174 (Prisma, NextAuth, SignOutPage/SignInPage)
 }

@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id          Int           @id @default(autoincrement())
+  username    String?
+  email       String        @unique
+  password    String
+  role        Role          @default(USER)
+  reservation Reservation[]
+  createdAt   DateTime      @default(now())
+}
+
+model Branche {
+  id        Int       @id @default(autoincrement())
+  title     String
+  address   String
+  theater   Theater[]
+  createdAt DateTime  @default(now())
+}
+
+model Theater {
+  id        Int        @id @default(autoincrement())
+  branch    Branche    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  branchId  Int
+  countSeat Int
+  seat      Seat[]
+  ShowTime  ShowTime[]
+  createdAt DateTime   @default(now())
+}
+
+model Movie {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  showTime    ShowTime[]
+  createdAt   DateTime   @default(now())
+}
+
+model Seat {
+  id             Int              @id @default(autoincrement())
+  theater        Theater          @relation(fields: [theaterId], references: [id], onDelete: Cascade)
+  theaterId      Int
+  seat_row       String
+  seat_number    Int
+  reservedTicket ReservedTicket[]
+  createdAt      DateTime         @default(now())
+}
+
+model ShowTime {
+  id          Int           @id @default(autoincrement())
+  movie       Movie         @relation(fields: [movieId], references: [id])
+  movieId     Int
+  theater     Theater       @relation(fields: [theaterId], references: [id])
+  theaterId   Int
+  startTime   DateTime
+  endTime     DateTime
+  Reservation Reservation[]
+  createdAt   DateTime      @default(now())
+}
+
+model Reservation {
+  id             Int              @id @default(autoincrement())
+  user           User             @relation(fields: [userId], references: [id])
+  userId         Int
+  showTime       ShowTime         @relation(fields: [showTimeId], references: [id])
+  showTimeId     Int
+  countTicket    Int
+  reservedTicket ReservedTicket[]
+  createdAt      DateTime         @default(now())
+}
+
+model ReservedTicket {
+  id         Int         @id @default(autoincrement())
+  reserved   Reservation @relation(fields: [reservedId], references: [id])
+  reservedId Int
+  seat       Seat        @relation(fields: [seatId], references: [id])
+  seatId     Int
+  createdAt  DateTime    @default(now())
+}

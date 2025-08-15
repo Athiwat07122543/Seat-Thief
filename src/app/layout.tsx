@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -18,11 +19,18 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
+=======
+import { SessionProviderComponent } from './components/SessionProvider'
+import "./globals.css";
+
+export default async function RootLayout({
+>>>>>>> 188c174 (Prisma, NextAuth, SignOutPage/SignInPage)
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
+<<<<<<< HEAD
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -30,5 +38,15 @@ export default function RootLayout({
         {children}
       </body>
     </html>
+=======
+    <SessionProviderComponent>
+      <html lang="en">
+        <body>
+          {children}
+        </body>
+      </html>
+    </SessionProviderComponent>
+
+>>>>>>> 188c174 (Prisma, NextAuth, SignOutPage/SignInPage)
   );
 }
